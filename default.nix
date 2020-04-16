@@ -47,6 +47,7 @@ let
       src = hello-src;
       propagatedBuildInputs = [
         self.tqdm
+        self.psycopg2
       ];
       passthru = {
         pythonPackages = myPythonPackages;

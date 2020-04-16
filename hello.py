@@ -1,4 +1,5 @@
 from tqdm import tqdm
+import psycopg2
 
 def main():
     print("Hello world!")

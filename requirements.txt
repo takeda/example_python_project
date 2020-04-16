@@ -4,4 +4,5 @@
 #
 #    pip-compile
 #
+psycopg2==2.8.5           # via hello (setup.py)
 tqdm==4.45.0              # via hello (setup.py)

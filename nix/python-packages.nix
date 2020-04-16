@@ -4,6 +4,20 @@
 { pkgs, fetchurl, fetchgit, fetchhg }:
 
 self: super: {
+  "psycopg2" = super.buildPythonPackage rec {
+    pname = "psycopg2";
+    version = "2.8.5";
+    src = fetchurl {
+      url = "https://files.pythonhosted.org/packages/a8/8f/1c5690eebf148d1d1554fc00ccf9101e134636553dbb75bdfef4f85d7647/psycopg2-2.8.5.tar.gz";
+      sha256 = "06081jk9srkd4ra9j8b93x9ld3a2yxsbsf5bbbcivbm1yx065m7p";
+    };
+    format = "setuptools";
+    doCheck = false;
+    buildInputs = [];
+    checkInputs = [];
+    nativeBuildInputs = [];
+    propagatedBuildInputs = [];
+  };
   "tqdm" = super.buildPythonPackage rec {
     pname = "tqdm";
     version = "4.45.0";

@@ -14,6 +14,12 @@ self: super: {
   #   ];
   # });
 
+  psycopg2 = super.psycopg2.override (attrs: {
+    nativeBuildInputs = with self; [
+      pkgs.postgresql_12
+    ];
+  });
+
   # Common needs
 
   # setuptools - avoid that we end up in a recursion
