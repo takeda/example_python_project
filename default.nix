@@ -6,45 +6,19 @@
 
 let
   inherit (pkgs.lib) fix extends;
+
   basePythonPackages = with builtins; if isAttrs pythonPackages
     then pythonPackages
     else getAttr pythonPackages pkgs;
 
-  # Works with the new python-packages, still can fallback to the old
-  # variant.
-  basePythonPackagesUnfix = basePythonPackages.__unfix__ or (
-    self: basePythonPackages.override (a: { inherit self; }));
-
-  elem = builtins.elem;
-  basename = path: with pkgs.lib; last (splitString "/" path);
-  startsWith = prefix: full: let
-    actualPrefix = builtins.substring 0 (builtins.stringLength prefix) full;
-  in actualPrefix == prefix;
-
-  src-filter = path: type: with pkgs.lib;
-    let
-      ext = last (splitString "." path);
-    in
-      !elem (basename path) [".hg" ".git" "__pycache__" ".eggs"] &&
-      !elem ext ["egg-info" "pyc"] &&
-      !startsWith "result" path;
-
-  hello-src = builtins.filterSource src-filter ./.;
-
-  pythonPackagesGenerated = import ./nix/python-packages.nix {
-    inherit pkgs;
-    inherit (pkgs) fetchurl fetchgit fetchhg;
-  };
-
-  pythonPackagesOverrides = import ./nix/python-packages-overrides.nix {
-    inherit basePythonPackages pkgs;
-  };
+  pythonPackagesGenerated = pkgs.callPackage ./nix/python-packages.nix {};
+  pythonPackagesOverrides = pkgs.callPackage ./nix/python-packages-overrides.nix { inherit basePythonPackages; };
 
   pythonPackagesLocalOverrides = self: super: {
     hello = super.buildPythonApplication {
       pname = "hello";
       version = "1.0";
-      src = hello-src;
+      src = pkgs.gitignoreSource ./.;
       propagatedBuildInputs = [
         self.tqdm
         self.psycopg2
@@ -60,6 +34,6 @@ let
     (extends pythonPackagesLocalOverrides
     (extends pythonPackagesOverrides
     (extends pythonPackagesGenerated
-             basePythonPackagesUnfix))));
+             basePythonPackages.__unfix__))));
 
 in myPythonPackages.hello

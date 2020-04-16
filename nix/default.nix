@@ -1,9 +1,11 @@
 { sources ? import ./sources.nix }:
 import sources.nixpkgs {
   overlays = [
-    (_: pkgs: { inherit sources; })
-    (_: pkgs: { niv = (import sources.niv { inherit pkgs; }).niv; })
-    (_: pkgs: { pip2nix = import sources.pip2nix { inherit pkgs; pythonPackages = "python38Packages"; }; })
+    (self: super: {
+      inherit sources;
+      inherit (import sources.gitignore { inherit (super) lib; }) gitignoreSource;
+      inherit (import sources.niv { pkgs = super; }) niv;
+      pip2nix = import sources.pip2nix { pkgs = super; pythonPackages = "python38Packages"; };
+    })
   ];
-  config = {};
 }
