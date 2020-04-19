@@ -20,3 +20,8 @@ $ pip2nix generate # generates nix/python-packages.nix from requirements.txt
 ```shell-script
 $ niv update # updates nix/sources.json
 ```
+
+# Using packages with C library dependencies
+
+Since setuptools doesn't store any information about C library dependencies, if you use libraries that depend on them e.g. psycopg2, you need to provide them manually. You can see an example of [adding postgres 12 dependency to psycopg2](https://github.com/takeda/example_python_project/blob/master/nix/python-packages-overrides.nix).
+The great thing about it is that you achive 100% reproducible build that encompasses not only the python package dependencies, but also ensures that exact same python binary is used with exactly the same C libraries.
