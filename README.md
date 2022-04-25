@@ -1,3 +1,11 @@
+# Update
+
+I see this repo is getting some minor popularity (judging from stars) so some people find the information valuable. Since I wrote this, I figured out a a better (in my opinoion) way of writing and distributing python applications with Nix.
+
+I created another tool called [Nix-CDE](https://github.com/takeda/nix-cde) that abstracts all the boilerplate and leaves configuration files similar to `configuration.nix` from NixOS. I believe that is much better and easier way to work on Python applications with Nix. The new way utilizes `poetry2nix` so it expects your Python project to use Poetry. It shouldn't be hard to switch from `setuptools` and due to PyPA pushing people to stop using `setuptools` many likely already moved away from it.
+
+Of course I'm still leaving this repo for all those for whom the new way doesn't work.
+
 # Integration of Nix with python (setuptools)
 
 This works best if you also have [direnv](https://direnv.net/) and [lorri](https://github.com/target/lorri) installed, all you need to do is just cd to the directory and you'll have all tooling available necessary for application developement (specified in `shell.nix`) (if you don't use direnv then just type `nix-shell` to enter something similar to virtualenv).
